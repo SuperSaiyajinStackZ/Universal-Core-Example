@@ -24,16 +24,25 @@
 *         reasonable ways as different from the original version.
 */
 
-#ifndef GFX_HPP
-#define GFX_HPP
+#include "common.hpp"
 
-#include "gui.hpp"
-#include "sprites.h"
+extern C2D_SpriteSheet sprites; // Include the spritesheet extern.
 
-namespace GFX
-{
-	// Draw Sprites.
-	void DrawSprite(int img, int x, int y, float ScaleX = 1, float ScaleY = 1);
+void GFX::DrawTop(void) {
+	Gui::ScreenDraw(Top);
+	Gui::Draw_Rect(0, 0, 400, 30, C2D_Color32(0, 160, 160, 255));
+	Gui::Draw_Rect(0, 30, 400, 180, C2D_Color32(0, 120, 120, 255));
+	Gui::Draw_Rect(0, 210, 400, 30, C2D_Color32(0, 160, 160, 255));
 }
 
-#endif
+void GFX::DrawBottom(void) {
+	Gui::ScreenDraw(Bottom);
+	Gui::Draw_Rect(0, 0, 320, 30, C2D_Color32(0, 160, 160, 255));
+	Gui::Draw_Rect(0, 30, 320, 180, C2D_Color32(0, 120, 120, 255));
+	Gui::Draw_Rect(0, 210, 320, 30, C2D_Color32(0, 160, 160, 255));
+}
+
+void GFX::DrawSprite(int img, int x, int y, float ScaleX, float ScaleY)
+{
+	Gui::DrawSprite(sprites, img, x, y, ScaleX, ScaleY);
+}

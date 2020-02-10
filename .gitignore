@@ -1,0 +1,9 @@
+
+*.d
+*.o
+*.lst
+*.map
+*.3dsx
+*.smdh
+*.elf
+build/sprites.h

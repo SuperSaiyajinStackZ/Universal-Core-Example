@@ -34,9 +34,9 @@ include $(DEVKITARM)/3ds_rules
 TARGET		:=	Universal-Core-Example
 BUILD		:=	build
 UNIVCORE	:=	Universal-Core
-SOURCES		:=	$(UNIVCORE) source
+SOURCES		:=	$(UNIVCORE) source source/gui source/screens
 DATA		:=	data
-INCLUDES	:=	$(UNIVCORE) include
+INCLUDES	:=	$(UNIVCORE) include include/gui include/screens
 GRAPHICS	:=	assets/gfx
 #GFXBUILD	:=	$(BUILD)
 ROMFS		:=	romfs

@@ -24,57 +24,28 @@
 *         reasonable ways as different from the original version.
 */
 
+#ifndef MAINMENU_HPP
+#define MAINMENU_HPP
+
 #include "common.hpp"
-#include "init.hpp"
-#include "mainMenu.hpp"
+#include "structs.hpp"
 
-bool exiting = false;
-touchPosition touch;
+#include <vector>
 
-C2D_SpriteSheet sprites;
+class MainMenu : public Screen
+{
+public:
+	void Draw(void) const override;
+	void Logic(u32 hDown, u32 hHeld, touchPosition touch) override;
 
-Result Init::Initialize() {
-	gfxInitDefault();
-	romfsInit();
-	Gui::init();
-	Gui::loadSheet("romfs:/gfx/sprites.t3x", sprites);
-	sdmcInit();
-	cfguInit();
-	osSetSpeedupEnable(true);	// Enable speed-up for New 3DS users
-	// Set Screen.
-	Gui::setScreen(std::make_unique<MainMenu>());
-    return 0;
-}
+private:
+	int Selection = 0;
 
-Result Init::MainLoop() {
-    // Initialize everything.
-    Initialize();
+	std::vector<Structs::ButtonPos> mainButtons = {
+		{90, 40, 140, 35}, // Button 1.
+		{90, 100, 140, 35}, // Button 2.
+		{90, 160, 140, 35}, // Button 3.
+	};
+};
 
-	// Loop as long as the status is not exiting.
-	while (aptMainLoop() && !exiting)
-	{
-		hidScanInput();
-		u32 hDown = hidKeysDown();
-		u32 hHeld = hidKeysHeld();
-		hidTouchRead(&touch);
-		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
-		C2D_TargetClear(Top, C2D_Color32(0, 0, 0, 0));
-		C2D_TargetClear(Bottom, C2D_Color32(0, 0, 0, 0));
-		Gui::clearTextBufs(); // Clear Text Buffer before.
-		Gui::mainLoop(hDown, hHeld, touch);
-		C3D_FrameEnd(0);
-	}
-    // Exit all services and exit the app.
-    Exit();
-    return 0;
-}
-
-Result Init::Exit() {
-	Gui::exit();
-	Gui::unloadSheet(sprites);
-	gfxExit();
-	cfguExit();
-	romfsExit();
-	sdmcExit();
-	return 0;
-}
+#endif

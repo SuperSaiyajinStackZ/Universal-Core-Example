@@ -24,57 +24,39 @@
 *         reasonable ways as different from the original version.
 */
 
-#include "common.hpp"
-#include "init.hpp"
 #include "mainMenu.hpp"
 
-bool exiting = false;
-touchPosition touch;
+extern bool touching(touchPosition touch, Structs::ButtonPos button);
+extern bool exiting;
 
-C2D_SpriteSheet sprites;
-
-Result Init::Initialize() {
-	gfxInitDefault();
-	romfsInit();
-	Gui::init();
-	Gui::loadSheet("romfs:/gfx/sprites.t3x", sprites);
-	sdmcInit();
-	cfguInit();
-	osSetSpeedupEnable(true);	// Enable speed-up for New 3DS users
-	// Set Screen.
-	Gui::setScreen(std::make_unique<MainMenu>());
-    return 0;
-}
-
-Result Init::MainLoop() {
-    // Initialize everything.
-    Initialize();
-
-	// Loop as long as the status is not exiting.
-	while (aptMainLoop() && !exiting)
-	{
-		hidScanInput();
-		u32 hDown = hidKeysDown();
-		u32 hHeld = hidKeysHeld();
-		hidTouchRead(&touch);
-		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
-		C2D_TargetClear(Top, C2D_Color32(0, 0, 0, 0));
-		C2D_TargetClear(Bottom, C2D_Color32(0, 0, 0, 0));
-		Gui::clearTextBufs(); // Clear Text Buffer before.
-		Gui::mainLoop(hDown, hHeld, touch);
-		C3D_FrameEnd(0);
+void MainMenu::Draw(void) const
+{
+	GFX::DrawTop();
+	Gui::DrawStringCentered(0, 2, 0.8f, WHITE, "Universal-Core Example", 400);
+	GFX::DrawSprite(sprites_test_idx, 27, 33);
+	GFX::DrawBottom();
+	// Draw Buttons. ;P
+	for (int i = 0; i < (int)mainButtons.size(); i++) {
+		Gui::Draw_Rect(mainButtons[i].x, mainButtons[i].y, mainButtons[i].w, mainButtons[i].h, C2D_Color32(0, 170, 100, 255));
+		if (Selection == i) {
+			Gui::Draw_Rect(mainButtons[i].x, mainButtons[i].y, mainButtons[i].w, mainButtons[i].h, C2D_Color32(0, 170, 170, 255));
+		}
 	}
-    // Exit all services and exit the app.
-    Exit();
-    return 0;
+	Gui::DrawStringCentered(0, mainButtons[0].y+10, 0.6f, WHITE, "Button 1");
+	Gui::DrawStringCentered(0, mainButtons[1].y+10, 0.6f, WHITE, "Button 2");
+	Gui::DrawStringCentered(0, mainButtons[2].y+10, 0.6f, WHITE, "Button 3");
 }
 
-Result Init::Exit() {
-	Gui::exit();
-	Gui::unloadSheet(sprites);
-	gfxExit();
-	cfguExit();
-	romfsExit();
-	sdmcExit();
-	return 0;
+
+void MainMenu::Logic(u32 hDown, u32 hHeld, touchPosition touch) {
+	if (hDown & KEY_START) {
+		exiting = true;
+	}
+
+	if (hDown & KEY_DOWN) {
+		if (Selection < (int)mainButtons.size() - 1)	Selection++;
+	}
+	if (hDown & KEY_UP) {
+		if (Selection > 0)	Selection--;
+	}
 }

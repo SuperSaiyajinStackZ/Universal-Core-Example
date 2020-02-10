@@ -24,11 +24,24 @@
 *         reasonable ways as different from the original version.
 */
 
-#include "gfx.hpp"
+#ifndef GFX_HPP
+#define GFX_HPP
 
-extern C2D_SpriteSheet sprites; // Include the spritesheet extern.
+#include "gui.hpp"
+#include "sprites.h"
 
-void GFX::DrawSprite(int img, int x, int y, float ScaleX, float ScaleY)
+#include <citro2d.h>
+
+#define WHITE C2D_Color32(255, 255, 255, 255)
+
+namespace GFX
 {
-	Gui::DrawSprite(sprites, img, x, y, ScaleX, ScaleY);
+	// Draw Basic GUI.
+	void DrawTop(void);
+	void DrawBottom(void);
+
+	// Draw Sprites.
+	void DrawSprite(int img, int x, int y, float ScaleX = 1, float ScaleY = 1);
 }
+
+#endif
