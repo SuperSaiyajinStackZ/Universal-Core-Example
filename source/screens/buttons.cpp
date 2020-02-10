@@ -51,7 +51,7 @@ void Buttons::Logic(u32 hDown, u32 hHeld, touchPosition touch) {
 	}
 
 	if (hDown & KEY_DOWN) {
-		if (Selection < (int)buttons.size()/2-1)	Selection++;
+		if (Selection < (int)buttons.size()/2-1 || Selection < (int)buttons.size()-1)	Selection++;
 	}
 
 	if (hDown & KEY_RIGHT) {
