@@ -42,6 +42,30 @@ void GFX::DrawBottom(void) {
 	Gui::Draw_Rect(0, 210, 320, 30, C2D_Color32(0, 160, 160, 255));
 }
 
+void GFX::DrawFileBrowseBG(bool isTop) {
+	if (isTop == true) {
+		Gui::ScreenDraw(Top);
+		Gui::Draw_Rect(0, 0, 400, 27, C2D_Color32(0, 160, 210, 255));
+		Gui::Draw_Rect(0, 27, 400, 31, C2D_Color32(0, 160, 160, 255));
+		Gui::Draw_Rect(0, 58, 400, 31, C2D_Color32(0, 120, 120, 255));
+		Gui::Draw_Rect(0, 89, 400, 31, C2D_Color32(0, 160, 160, 255));
+		Gui::Draw_Rect(0, 120, 400, 31, C2D_Color32(0, 120, 120, 255));
+		Gui::Draw_Rect(0, 151, 400, 31, C2D_Color32(0, 160, 160, 255));
+		Gui::Draw_Rect(0, 182, 400, 31, C2D_Color32(0, 120, 120, 255));
+		Gui::Draw_Rect(0, 213, 400, 27, C2D_Color32(0, 160, 210, 255));
+	} else {
+		Gui::ScreenDraw(Bottom);
+		Gui::Draw_Rect(0, 0, 320, 27, C2D_Color32(0, 160, 210, 255));
+		Gui::Draw_Rect(0, 27, 320, 31, C2D_Color32(0, 160, 160, 255));
+		Gui::Draw_Rect(0, 58, 320, 31, C2D_Color32(0, 120, 120, 255));
+		Gui::Draw_Rect(0, 89, 320, 31, C2D_Color32(0, 160, 160, 255));
+		Gui::Draw_Rect(0, 120, 320, 31, C2D_Color32(0, 120, 120, 255));
+		Gui::Draw_Rect(0, 151, 320, 31, C2D_Color32(0, 160, 160, 255));
+		Gui::Draw_Rect(0, 182, 320, 31, C2D_Color32(0, 120, 120, 255));
+		Gui::Draw_Rect(0, 213, 320, 27, C2D_Color32(0, 160, 210, 255));
+	}
+}
+
 void GFX::DrawSprite(int img, int x, int y, float ScaleX, float ScaleY)
 {
 	Gui::DrawSprite(sprites, img, x, y, ScaleX, ScaleY);

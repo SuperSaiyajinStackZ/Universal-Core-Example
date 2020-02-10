@@ -24,25 +24,22 @@
 *         reasonable ways as different from the original version.
 */
 
-#ifndef GFX_HPP
-#define GFX_HPP
+#ifndef FILELIST_HPP
+#define FILELIST_HPP
 
-#include "gui.hpp"
-#include "sprites.h"
+#include "common.hpp"
+#include "structs.hpp"
 
-#include <citro2d.h>
+#include <vector>
 
-#define WHITE C2D_Color32(255, 255, 255, 255)
-
-namespace GFX
+class FileList : public Screen
 {
-	// Draw Basic GUI.
-	void DrawTop(void);
-	void DrawBottom(void);
-	void DrawFileBrowseBG(bool isTop = true);
-	
-	// Draw Sprites.
-	void DrawSprite(int img, int x, int y, float ScaleX = 1, float ScaleY = 1);
-}
+public:
+	void Draw(void) const override;
+	void Logic(u32 hDown, u32 hHeld, touchPosition touch) override;
+
+private:
+	int Selection = 0;
+};
 
 #endif

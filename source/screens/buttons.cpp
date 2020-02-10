@@ -24,25 +24,45 @@
 *         reasonable ways as different from the original version.
 */
 
-#ifndef GFX_HPP
-#define GFX_HPP
+#include "buttons.hpp"
 
-#include "gui.hpp"
-#include "sprites.h"
+extern bool touching(touchPosition touch, Structs::ButtonPos button);
 
-#include <citro2d.h>
-
-#define WHITE C2D_Color32(255, 255, 255, 255)
-
-namespace GFX
+void Buttons::Draw(void) const
 {
-	// Draw Basic GUI.
-	void DrawTop(void);
-	void DrawBottom(void);
-	void DrawFileBrowseBG(bool isTop = true);
-	
-	// Draw Sprites.
-	void DrawSprite(int img, int x, int y, float ScaleX = 1, float ScaleY = 1);
+	GFX::DrawTop();
+	Gui::DrawStringCentered(0, 2, 0.8f, WHITE, "Universal-Core Example -> Buttons", 400);
+	GFX::DrawBottom();
+	// Draw Buttons.
+	for (int i = 0; i < (int)buttons.size(); i++) {
+		if (Selection == i) {
+			Gui::Draw_Rect(buttons[i].x, buttons[i].y, buttons[i].w, buttons[i].h, C2D_Color32(0, 170, 170, 255));
+		} else {
+			Gui::Draw_Rect(buttons[i].x, buttons[i].y, buttons[i].w, buttons[i].h, C2D_Color32(0, 170, 100, 255));
+		}
+	}
 }
 
-#endif
+
+void Buttons::Logic(u32 hDown, u32 hHeld, touchPosition touch) {
+	if (hDown & KEY_B) {
+		Gui::screenBack();
+		return;
+	}
+
+	if (hDown & KEY_DOWN) {
+		if (Selection < (int)buttons.size()/2-1)	Selection++;
+	}
+
+	if (hDown & KEY_RIGHT) {
+		if (Selection < (int)buttons.size()/2)	Selection += 3;
+	}
+
+	if (hDown & KEY_LEFT) {
+		if (Selection > (int)buttons.size()/2-1)	Selection -= 3;
+	}
+
+	if (hDown & KEY_UP) {
+		if (Selection > 0)	Selection--;
+	}
+}

@@ -24,25 +24,32 @@
 *         reasonable ways as different from the original version.
 */
 
-#ifndef GFX_HPP
-#define GFX_HPP
+#ifndef BUTTONS_HPP
+#define BUTTONS_HPP
 
-#include "gui.hpp"
-#include "sprites.h"
+#include "common.hpp"
+#include "structs.hpp"
 
-#include <citro2d.h>
+#include <vector>
 
-#define WHITE C2D_Color32(255, 255, 255, 255)
-
-namespace GFX
+class Buttons : public Screen
 {
-	// Draw Basic GUI.
-	void DrawTop(void);
-	void DrawBottom(void);
-	void DrawFileBrowseBG(bool isTop = true);
-	
-	// Draw Sprites.
-	void DrawSprite(int img, int x, int y, float ScaleX = 1, float ScaleY = 1);
-}
+public:
+	void Draw(void) const override;
+	void Logic(u32 hDown, u32 hHeld, touchPosition touch) override;
+
+private:
+	int Selection = 0;
+	// Define Button X, Y, W, H here.
+	std::vector<Structs::ButtonPos> buttons = {
+		{10, 40, 140, 35}, // Button 1.
+		{10, 100, 140, 35}, // Button 2.
+		{10, 160, 140, 35}, // Button 3.
+
+		{170, 40, 140, 35}, // Button 4.
+		{170, 100, 140, 35}, // Button 5.
+		{170, 160, 140, 35}, // Button 6.
+	};
+};
 
 #endif
