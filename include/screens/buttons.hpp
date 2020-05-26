@@ -32,12 +32,11 @@
 
 #include <vector>
 
-class Buttons : public Screen
-{
+class Buttons : public Screen {
 public:
 	void Draw(void) const override;
 	void Logic(u32 hDown, u32 hHeld, touchPosition touch) override;
-
+	void callConstructor() override;
 private:
 	int Selection = 0;
 	// Define Button X, Y, W, H here.

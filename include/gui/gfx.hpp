@@ -34,8 +34,7 @@
 
 #define WHITE C2D_Color32(255, 255, 255, 255)
 
-namespace GFX
-{
+namespace GFX {
 	// Draw Basic GUI.
 	void DrawTop(void);
 	void DrawBottom(void);

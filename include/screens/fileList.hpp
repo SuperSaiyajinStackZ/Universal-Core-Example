@@ -32,14 +32,14 @@
 
 #include <vector>
 
-class FileList : public Screen
-{
+class FileList : public Screen {
 public:
 	void Draw(void) const override;
 	void Logic(u32 hDown, u32 hHeld, touchPosition touch) override;
-
+	void callConstructor() override;
 private:
 	int Selection = 0;
+	std::vector<std::string> exampleVector;
 };
 
 #endif

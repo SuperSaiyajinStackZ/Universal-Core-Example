@@ -23,6 +23,7 @@
 *         or requiring that modified versions of such material be marked in
 *         reasonable ways as different from the original version.
 */
+
 // Screens.
 #include "buttons.hpp"
 #include "fileList.hpp"
@@ -31,57 +32,64 @@
 extern bool touching(touchPosition touch, Structs::ButtonPos button);
 extern bool exiting;
 
-void MainMenu::Draw(void) const
-{
+void MainMenu::callConstructor() {
+	// Put stuff, which we need to initialize this screen here.
+}
+
+void MainMenu::Draw(void) const {
 	GFX::DrawTop();
 	Gui::DrawStringCentered(0, 2, 0.8f, WHITE, "Universal-Core Example -> MainMenu", 400);
 	GFX::DrawSprite(sprites_test_idx, 27, 33);
+	if (fadealpha > 0) Gui::Draw_Rect(0, 0, 400, 240, C2D_Color32(fadecolor, fadecolor, fadecolor, fadealpha)); // Fade in/out effect
 	GFX::DrawBottom();
+
 	// Draw Buttons. ;P
-	for (int i = 0; i < (int)mainButtons.size(); i++) {
-		if (Selection == i) {
-			Gui::Draw_Rect(mainButtons[i].x, mainButtons[i].y, mainButtons[i].w, mainButtons[i].h, C2D_Color32(0, 170, 170, 255));
+	for (int i = 0; i < (int)this->mainButtons.size(); i++) {
+		if (this->Selection == i) {
+			Gui::Draw_Rect(this->mainButtons[i].x, this->mainButtons[i].y, this->mainButtons[i].w, this->mainButtons[i].h, C2D_Color32(0, 170, 170, 255));
 		} else {
-			Gui::Draw_Rect(mainButtons[i].x, mainButtons[i].y, mainButtons[i].w, mainButtons[i].h, C2D_Color32(0, 170, 100, 255));
+			Gui::Draw_Rect(this->mainButtons[i].x, this->mainButtons[i].y, this->mainButtons[i].w, this->mainButtons[i].h, C2D_Color32(0, 170, 100, 255));
 		}
 	}
 	Gui::DrawStringCentered(0, mainButtons[0].y+10, 0.6f, WHITE, "FileList Example");
 	Gui::DrawStringCentered(0, mainButtons[1].y+10, 0.6f, WHITE, "Buttons Example");
 	Gui::DrawStringCentered(0, mainButtons[2].y+10, 0.6f, WHITE, "?");
+	if (fadealpha > 0) Gui::Draw_Rect(0, 0, 320, 240, C2D_Color32(fadecolor, fadecolor, fadecolor, fadealpha)); // Fade in/out effect
 }
 
 
 void MainMenu::Logic(u32 hDown, u32 hHeld, touchPosition touch) {
 	// Press Start to exit the app.
 	if (hDown & KEY_START) {
+		fadeout = true;
 		exiting = true;
 	}
 
 	// Press <A> on a Button to enter example screen.
 	if (hDown & KEY_A) {
-		if (Selection == 0) {
-			Gui::setScreen(std::make_unique<FileList>());
-		} else if (Selection == 1) {
-			Gui::setScreen(std::make_unique<Buttons>());
+		if (this->Selection == 0) {
+			Gui::setScreen(std::make_unique<FileList>(), true);
+		} else if (this->Selection == 1) {
+			Gui::setScreen(std::make_unique<Buttons>(), true);
 		}
 	}
 
 	// Touch the button to enter example screen.
 	if (hDown & KEY_TOUCH) {
-		if (touching(touch, mainButtons[0])) {
-			Gui::setScreen(std::make_unique<FileList>());
-		} else if (touching(touch, mainButtons[1])) {
-			Gui::setScreen(std::make_unique<Buttons>());
+		if (touching(touch, this->mainButtons[0])) {
+			Gui::setScreen(std::make_unique<FileList>(), true);
+		} else if (touching(touch, this->mainButtons[1])) {
+			Gui::setScreen(std::make_unique<Buttons>(), true);
 		}
 	}
 
 	// Press Down to go one entry down. - 1 -> Because we don't want to go one Entry after the actual Buttons.
 	if (hDown & KEY_DOWN) {
-		if (Selection < (int)mainButtons.size() - 1)	Selection++;
+		if (this->Selection < (int)this->mainButtons.size() - 1)	this->Selection++;
 	}
 
 	// Press Up to go one entry up.
 	if (hDown & KEY_UP) {
-		if (Selection > 0)	Selection--;
+		if (this->Selection > 0)	this->Selection--;
 	}
 }

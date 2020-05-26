@@ -25,44 +25,49 @@
 */
 
 #include "buttons.hpp"
+#include "mainMenu.hpp"
 
 extern bool touching(touchPosition touch, Structs::ButtonPos button);
 
-void Buttons::Draw(void) const
-{
+void Buttons::callConstructor() {
+	// Put stuff, which we need to initialize this screen here.
+}
+
+void Buttons::Draw(void) const {
 	GFX::DrawTop();
 	Gui::DrawStringCentered(0, 2, 0.8f, WHITE, "Universal-Core Example -> Buttons", 400);
+	if (fadealpha > 0) Gui::Draw_Rect(0, 0, 400, 240, C2D_Color32(fadecolor, fadecolor, fadecolor, fadealpha)); // Fade in/out effect
 	GFX::DrawBottom();
 	// Draw Buttons.
-	for (int i = 0; i < (int)buttons.size(); i++) {
-		if (Selection == i) {
-			Gui::Draw_Rect(buttons[i].x, buttons[i].y, buttons[i].w, buttons[i].h, C2D_Color32(0, 170, 170, 255));
+	for (int i = 0; i < (int)this->buttons.size(); i++) {
+		if (this->Selection == i) {
+			Gui::Draw_Rect(this->buttons[i].x, this->buttons[i].y, this->buttons[i].w, this->buttons[i].h, C2D_Color32(0, 170, 170, 255));
 		} else {
-			Gui::Draw_Rect(buttons[i].x, buttons[i].y, buttons[i].w, buttons[i].h, C2D_Color32(0, 170, 100, 255));
+			Gui::Draw_Rect(this->buttons[i].x, this->buttons[i].y, this->buttons[i].w, this->buttons[i].h, C2D_Color32(0, 170, 100, 255));
 		}
 	}
+	if (fadealpha > 0) Gui::Draw_Rect(0, 0, 320, 240, C2D_Color32(fadecolor, fadecolor, fadecolor, fadealpha)); // Fade in/out effect
 }
 
 
 void Buttons::Logic(u32 hDown, u32 hHeld, touchPosition touch) {
 	if (hDown & KEY_B) {
-		Gui::screenBack();
-		return;
+		Gui::setScreen(std::make_unique<MainMenu>(), true);
 	}
 
 	if (hDown & KEY_DOWN) {
-		if (Selection < (int)buttons.size()/2-1 || Selection < (int)buttons.size()-1)	Selection++;
+		if (this->Selection < (int)this->buttons.size()/2-1 || this->Selection < (int)this->buttons.size()-1)	this->Selection++;
 	}
 
 	if (hDown & KEY_RIGHT) {
-		if (Selection < (int)buttons.size()/2)	Selection += 3;
+		if (this->Selection < (int)this->buttons.size()/2)	this->Selection += 3;
 	}
 
 	if (hDown & KEY_LEFT) {
-		if (Selection > (int)buttons.size()/2-1)	Selection -= 3;
+		if (this->Selection > (int)this->buttons.size()/2-1)	this->Selection -= 3;
 	}
 
 	if (hDown & KEY_UP) {
-		if (Selection > 0)	Selection--;
+		if (this->Selection > 0)	this->Selection--;
 	}
 }

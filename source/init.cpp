@@ -30,52 +30,73 @@
 #include "structs.hpp"
 
 bool exiting = false;
-touchPosition touch;
 
 C2D_SpriteSheet sprites;
 
 // If button Position pressed -> Do something.
 bool touching(touchPosition touch, Structs::ButtonPos button) {
-	if (touch.px >= button.x && touch.px <= (button.x + button.w) && touch.py >= button.y && touch.py <= (button.y + button.h))
-		return true;
-	else
-		return false;
+	if (touch.px >= button.x && touch.px <= (button.x + button.w) && touch.py >= button.y && touch.py <= (button.y + button.h))	return true;
+	else	return false;
 }
 
 Result Init::Initialize() {
+	// Here we set the fade effect for fadein.
+	fadealpha = 255;
+	fadein = true;
+
 	gfxInitDefault();
 	romfsInit();
 	Gui::init();
 	Gui::loadSheet("romfs:/gfx/sprites.t3x", sprites);
-	sdmcInit();
 	cfguInit();
 	osSetSpeedupEnable(true);	// Enable speed-up for New 3DS users
 	// Set Screen.
-	Gui::setScreen(std::make_unique<MainMenu>());
-    return 0;
+	Gui::setScreen(std::make_unique<MainMenu>(), false); // Set the screen initially as MainMenu.
+	return 0;
 }
 
 Result Init::MainLoop() {
-    // Initialize everything.
-    Initialize();
+	// Initialize everything.
+	Init::Initialize();
 
 	// Loop as long as the status is not exiting.
-	while (aptMainLoop() && !exiting)
-	{
+	while (aptMainLoop()) {
+		// Scan the input.
 		hidScanInput();
 		u32 hDown = hidKeysDown();
 		u32 hHeld = hidKeysHeld();
+		touchPosition touch;
 		hidTouchRead(&touch);
-		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
+
+		Gui::clearTextBufs(); // Clear Text Buffer before.
 		C2D_TargetClear(Top, C2D_Color32(0, 0, 0, 0));
 		C2D_TargetClear(Bottom, C2D_Color32(0, 0, 0, 0));
-		Gui::clearTextBufs(); // Clear Text Buffer before.
-		Gui::mainLoop(hDown, hHeld, touch);
-		C3D_FrameEnd(0);
+
+		if (!exiting) {
+			// Screen Logic & Draw.
+			C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
+			Gui::DrawScreen();
+			Gui::ScreenLogic(hDown, hHeld, touch, true);
+			C3D_FrameEnd(0);
+		} else {
+			C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
+			Gui::ScreenDraw(Top);
+			if (fadealpha > 0) Gui::Draw_Rect(0, 0, 400, 240, C2D_Color32(fadecolor, fadecolor, fadecolor, fadealpha)); // Fade in/out effect
+			Gui::ScreenDraw(Bottom);
+			if (fadealpha > 0) Gui::Draw_Rect(0, 0, 320, 240, C2D_Color32(fadecolor, fadecolor, fadecolor, fadealpha)); // Fade in/out effect
+			C3D_FrameEnd(0);
+
+			if (fadeout == false) {
+				break;
+			}
+		}
+
+		// Call the fade effects here. :D
+		Gui::fadeEffects();
 	}
-    // Exit all services and exit the app.
-    Exit();
-    return 0;
+	// Exit all services and exit the app.
+	Init::Exit();
+	return 0;
 }
 
 Result Init::Exit() {
@@ -84,6 +105,5 @@ Result Init::Exit() {
 	gfxExit();
 	cfguExit();
 	romfsExit();
-	sdmcExit();
 	return 0;
 }
