@@ -1,6 +1,6 @@
 /*
 *   This file is part of Universal-Core-Example
-*   Copyright (C) 2020 StackZ
+*   Copyright (C) 2020 SuperSaiyajinStackie
 *
 *   This program is free software: you can redistribute it and/or modify
 *   it under the terms of the GNU General Public License as published by
@@ -36,10 +36,8 @@ class MainMenu : public Screen {
 public:
 	void Draw(void) const override;
 	void Logic(u32 hDown, u32 hHeld, touchPosition touch) override;
-	void callConstructor() override;
 private:
 	int Selection = 0;
-
 	std::vector<Structs::ButtonPos> mainButtons = {
 		{90, 40, 140, 35}, // Button 1.
 		{90, 100, 140, 35}, // Button 2.

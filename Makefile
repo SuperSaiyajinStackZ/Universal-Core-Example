@@ -39,8 +39,22 @@ DATA		:=	data
 INCLUDES	:=	$(UNIVCORE) include include/gui include/screens
 GRAPHICS	:=	assets/gfx
 #GFXBUILD	:=	$(BUILD)
+APP_AUTHOR	:=	SuperSaiyajinStackie
+APP_DESCRIPTION := An Universal-Core example.
+ICON		:=	app/icon.png
 ROMFS		:=	romfs
 GFXBUILD	:=	$(ROMFS)/gfx
+
+#---------------------------------------------------------------------------------
+# External tools
+#---------------------------------------------------------------------------------
+ifeq ($(OS),Windows_NT)
+BANNERTOOL ?= bannertool.exe
+
+else
+BANNERTOOL ?= bannertool
+
+endif
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -164,6 +178,7 @@ endif
 #---------------------------------------------------------------------------------
 all: $(BUILD) $(GFXBUILD) $(DEPSDIR) $(ROMFS_T3XFILES) $(T3XHFILES)
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
+	$(BANNERTOOL) makesmdh -i "app/icon.png" -s "$(TARGET)" -l "$(APP_DESCRIPTION)" -p "$(APP_AUTHOR)" -o "app/icon.bin"
 
 $(BUILD):
 	@mkdir -p $@

@@ -24,12 +24,17 @@
 *         reasonable ways as different from the original version.
 */
 
-#ifndef COMMON_HPP
-#define COMMON_HPP
+#ifndef STACK_HPP
+#define STACK_HPP
 
-// This is the new "screenCommon.hpp", lol.
-#include "gfx.hpp"
-#include "gui.hpp"
-#include "screenCommon.hpp"
+#include "common.hpp"
+
+class Stack : public Screen {
+public:
+	void Draw(void) const override;
+	void Logic(u32 hDown, u32 hHeld, touchPosition touch) override;
+private:
+	int delay = 0;
+};
 
 #endif

@@ -1,6 +1,6 @@
 /*
 *   This file is part of Universal-Core-Example
-*   Copyright (C) 2020 StackZ
+*   Copyright (C) 2020 SuperSaiyajinStackie
 *
 *   This program is free software: you can redistribute it and/or modify
 *   it under the terms of the GNU General Public License as published by
@@ -32,14 +32,9 @@
 extern bool touching(touchPosition touch, Structs::ButtonPos button);
 extern bool exiting;
 
-void MainMenu::callConstructor() {
-	// Put stuff, which we need to initialize this screen here.
-}
-
 void MainMenu::Draw(void) const {
 	GFX::DrawTop();
 	Gui::DrawStringCentered(0, 2, 0.8f, WHITE, "Universal-Core Example -> MainMenu", 400);
-	GFX::DrawSprite(sprites_test_idx, 27, 33);
 	if (fadealpha > 0) Gui::Draw_Rect(0, 0, 400, 240, C2D_Color32(fadecolor, fadecolor, fadecolor, fadealpha)); // Fade in/out effect
 	GFX::DrawBottom();
 
@@ -61,6 +56,7 @@ void MainMenu::Draw(void) const {
 void MainMenu::Logic(u32 hDown, u32 hHeld, touchPosition touch) {
 	// Press Start to exit the app.
 	if (hDown & KEY_START) {
+		fadecolor = 0;
 		fadeout = true;
 		exiting = true;
 	}
@@ -68,18 +64,18 @@ void MainMenu::Logic(u32 hDown, u32 hHeld, touchPosition touch) {
 	// Press <A> on a Button to enter example screen.
 	if (hDown & KEY_A) {
 		if (this->Selection == 0) {
-			Gui::setScreen(std::make_unique<FileList>(), true);
+			Gui::setScreen(std::make_unique<FileList>(), true, false);
 		} else if (this->Selection == 1) {
-			Gui::setScreen(std::make_unique<Buttons>(), true);
+			Gui::setScreen(std::make_unique<Buttons>(), true, false);
 		}
 	}
 
 	// Touch the button to enter example screen.
 	if (hDown & KEY_TOUCH) {
 		if (touching(touch, this->mainButtons[0])) {
-			Gui::setScreen(std::make_unique<FileList>(), true);
+			Gui::setScreen(std::make_unique<FileList>(), true, false);
 		} else if (touching(touch, this->mainButtons[1])) {
-			Gui::setScreen(std::make_unique<Buttons>(), true);
+			Gui::setScreen(std::make_unique<Buttons>(), true, false);
 		}
 	}
 

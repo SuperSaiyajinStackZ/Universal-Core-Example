@@ -1,6 +1,6 @@
 /*
 *   This file is part of Universal-Core-Example
-*   Copyright (C) 2020 StackZ
+*   Copyright (C) 2020 SuperSaiyajinStackie
 *
 *   This program is free software: you can redistribute it and/or modify
 *   it under the terms of the GNU General Public License as published by
@@ -29,10 +29,6 @@
 
 extern bool touching(touchPosition touch, Structs::ButtonPos button);
 
-void Buttons::callConstructor() {
-	// Put stuff, which we need to initialize this screen here.
-}
-
 void Buttons::Draw(void) const {
 	GFX::DrawTop();
 	Gui::DrawStringCentered(0, 2, 0.8f, WHITE, "Universal-Core Example -> Buttons", 400);
@@ -52,7 +48,7 @@ void Buttons::Draw(void) const {
 
 void Buttons::Logic(u32 hDown, u32 hHeld, touchPosition touch) {
 	if (hDown & KEY_B) {
-		Gui::setScreen(std::make_unique<MainMenu>(), true);
+		Gui::setScreen(std::make_unique<MainMenu>(), true, false);
 	}
 
 	if (hDown & KEY_DOWN) {

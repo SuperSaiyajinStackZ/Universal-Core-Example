@@ -1,6 +1,6 @@
 /*
 *   This file is part of Universal-Core-Example
-*   Copyright (C) 2020 StackZ
+*   Copyright (C) 2020 SuperSaiyajinStackie
 *
 *   This program is free software: you can redistribute it and/or modify
 *   it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@
 
 extern bool touching(touchPosition touch, Structs::ButtonPos button);
 
-void FileList::callConstructor() {
+FileList::FileList() {
 	// Put stuff, which we need to initialize this screen here.
 	for (int i = 0; i < 7; i++) {
 		this->exampleVector.push_back({"Entry" + std::to_string(i)});
@@ -61,7 +61,7 @@ void FileList::Draw(void) const {
 
 void FileList::Logic(u32 hDown, u32 hHeld, touchPosition touch) {
 	if (hDown & KEY_B) {
-		Gui::setScreen(std::make_unique<MainMenu>(), true);
+		Gui::setScreen(std::make_unique<MainMenu>(), true, false);
 	}
 
 	if (hDown & KEY_DOWN) {

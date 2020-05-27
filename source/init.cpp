@@ -1,6 +1,6 @@
 /*
 *   This file is part of Universal-Core-Example
-*   Copyright (C) 2020 StackZ
+*   Copyright (C) 2020 SuperSaiyajinStackie
 *
 *   This program is free software: you can redistribute it and/or modify
 *   it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 
 #include "common.hpp"
 #include "init.hpp"
-#include "mainMenu.hpp"
+#include "stack.hpp"
 #include "structs.hpp"
 
 bool exiting = false;
@@ -40,7 +40,7 @@ bool touching(touchPosition touch, Structs::ButtonPos button) {
 }
 
 Result Init::Initialize() {
-	// Here we set the fade effect for fadein.
+	// Here we set the initial fade effect for fadein.
 	fadealpha = 255;
 	fadein = true;
 
@@ -50,8 +50,8 @@ Result Init::Initialize() {
 	Gui::loadSheet("romfs:/gfx/sprites.t3x", sprites);
 	cfguInit();
 	osSetSpeedupEnable(true);	// Enable speed-up for New 3DS users
-	// Set Screen.
-	Gui::setScreen(std::make_unique<MainMenu>(), false); // Set the screen initially as MainMenu.
+	// We don't rely on older screens, so set false as the last param here.
+	Gui::setScreen(std::make_unique<Stack>(), false, false); // Set the screen initially as Stack Screen.
 	return 0;
 }
 
@@ -72,27 +72,17 @@ Result Init::MainLoop() {
 		C2D_TargetClear(Top, C2D_Color32(0, 0, 0, 0));
 		C2D_TargetClear(Bottom, C2D_Color32(0, 0, 0, 0));
 
-		if (!exiting) {
-			// Screen Logic & Draw.
-			C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
-			Gui::DrawScreen();
-			Gui::ScreenLogic(hDown, hHeld, touch, true);
-			C3D_FrameEnd(0);
-		} else {
-			C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
-			Gui::ScreenDraw(Top);
-			if (fadealpha > 0) Gui::Draw_Rect(0, 0, 400, 240, C2D_Color32(fadecolor, fadecolor, fadecolor, fadealpha)); // Fade in/out effect
-			Gui::ScreenDraw(Bottom);
-			if (fadealpha > 0) Gui::Draw_Rect(0, 0, 320, 240, C2D_Color32(fadecolor, fadecolor, fadecolor, fadealpha)); // Fade in/out effect
-			C3D_FrameEnd(0);
-
-			if (fadeout == false) {
-				break;
-			}
+		// Screen Logic & Draw.
+		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
+		Gui::DrawScreen(false);
+		Gui::ScreenLogic(hDown, hHeld, touch, true, false);
+		C3D_FrameEnd(0);
+		if (exiting) {
+			if (!fadeout)	break;
 		}
 
 		// Call the fade effects here. :D
-		Gui::fadeEffects();
+		Gui::fadeEffects(6, 6, false);
 	}
 	// Exit all services and exit the app.
 	Init::Exit();
